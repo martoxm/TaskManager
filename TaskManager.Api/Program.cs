@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Api.Extensions;
 using TaskManager.Application.Interfaces;
 using TaskManager.Application.Services;
 using TaskManager.Domain.Interfaces;
@@ -8,12 +9,15 @@ using TaskManager.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // #region Add services
-builder.Services.AddSwaggerGen();
 
 // Add Controllers
 builder.Services.AddControllers();
 
-// Add DbContext (MySQL)
+// Adiciona Swagger.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Registra o DbContext com MySQL.
 builder.Services.AddDbContext<TaskDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySQL"),
@@ -21,19 +25,15 @@ builder.Services.AddDbContext<TaskDbContext>(options =>
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
     ));
 
-// Add TaskService (Application)
+// Registra os serviços da aplicação.
 builder.Services.AddScoped<ITaskService, TaskService>();
 
-// Add TaskRepository (Infrastructure)
+// Registra os repositórios da infraestrutura.
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-
-// #endregion
 
 var app = builder.Build();
 
-// #region Configure middleware
-
-// Use Swagger (só no development)
+// Ativa Swagger apenas em desenvolvimento.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -43,5 +43,12 @@ if (app.Environment.IsDevelopment())
 // Use Controllers
 app.MapControllers();
 
-// #endregion
+// Registra o middleware global de exceção.
+app.UseGlobalExceptionMiddleware();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 app.Run();
