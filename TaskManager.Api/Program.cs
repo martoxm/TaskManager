@@ -1,7 +1,8 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using System.Text;
 using TaskManager.Application.Interfaces;
 using TaskManager.Application.Services;
 using TaskManager.Domain.Interfaces;
@@ -15,7 +16,22 @@ builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+    });
+});
 
 // DbContext
 builder.Services.AddDbContext<TaskDbContext>(options =>
