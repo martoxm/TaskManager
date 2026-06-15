@@ -30,7 +30,7 @@ namespace TaskManager.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                // Retorna erro de validação para o cliente.
+                // Retorna erro de validação de domínio.
                 return BadRequest(new { error = ex.Message });
             }
         }
@@ -76,7 +76,7 @@ namespace TaskManager.Api.Controllers
         {
             try
             {
-                // Atualiza a tarefa pela regra de negócio.
+                // Atualiza a tarefa.
                 var task = await _taskService.Update(id, dto);
 
                 // Retorna 200 OK com a tarefa atualizada.
@@ -102,10 +102,10 @@ namespace TaskManager.Api.Controllers
         {
             try
             {
-                // Remove a tarefa pela camada de Application.
+                // Remove a tarefa.
                 var deleted = await _taskService.Delete(id);
 
-                // Se a regra retornar false, a tarefa não existia.
+                // Se não encontrou, retorna 404.
                 if (!deleted)
                     return NotFound(new { error = "Tarefa não encontrada." });
 
@@ -114,7 +114,7 @@ namespace TaskManager.Api.Controllers
             }
             catch (ValidationException ex)
             {
-                // Mantém resposta padronizada para erro de domínio.
+                // Mantém resposta de erro padronizada.
                 return NotFound(new { error = ex.Message });
             }
         }

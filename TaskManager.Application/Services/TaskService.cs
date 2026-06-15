@@ -12,15 +12,9 @@ namespace TaskManager.Application.Services
     // Segue SOLID:
     //   - SRP: só faz uma coisa (gerenciar tarefas)
     //   - DIP: depende de interface ITaskRepository (não implementação concreta)
-    public class TaskService : ITaskService
+    public class TaskService(ITaskRepository repository) : ITaskService
     {
-        private readonly ITaskRepository _repository;
-
-        // Injeção de dependência via construtor
-        public TaskService(ITaskRepository repository)
-        {
-            _repository = repository;
-        }
+        private readonly ITaskRepository _repository = repository;
 
         #region Método Create
 
