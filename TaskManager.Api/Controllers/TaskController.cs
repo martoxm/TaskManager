@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.DTOs;
 using TaskManager.Application.Interfaces;
 
 namespace TaskManager.Api.Controllers
 {
-    #region TaskController
-
+    [Authorize]
     [ApiController]
     [Route("api/tasks")]
     public class TaskController(ITaskService taskService) : ControllerBase
@@ -75,6 +75,4 @@ namespace TaskManager.Api.Controllers
 
         #endregion DELETE /api/tasks/{id}
     }
-
-    #endregion TaskController
 }

@@ -1,5 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using TaskManager.Api.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using TaskManager.Application.Interfaces;
 using TaskManager.Application.Services;
 using TaskManager.Domain.Interfaces;
@@ -8,16 +10,14 @@ using TaskManager.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// #region Add services
-
-// Add Controllers
+// Controllers
 builder.Services.AddControllers();
 
-// Adiciona Swagger.
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registra o DbContext com MySQL.
+// DbContext
 builder.Services.AddDbContext<TaskDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySQL"),
@@ -25,30 +25,47 @@ builder.Services.AddDbContext<TaskDbContext>(options =>
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
     ));
 
-// Registra os serviços da aplicação.
-builder.Services.AddScoped<ITaskService, TaskService>();
+// JWT
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
-// Registra os repositórios da infraestrutura.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+// DI
+builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
-// Ativa Swagger apenas em desenvolvimento.
+// Swagger em desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Use Controllers
-app.MapControllers();
-
-// Registra o middleware global de exceção.
-app.UseGlobalExceptionMiddleware();
-
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.Run();
