@@ -9,5 +9,5 @@
         public string Email { get; set; } = string.Empty;
     }
 
-    #endregion
+    #endregion AuthResponseDto
 }

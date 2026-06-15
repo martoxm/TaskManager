@@ -14,5 +14,5 @@ namespace TaskManager.Application.DTOs
         public string Password { get; set; } = string.Empty;
     }
 
-    #endregion
+    #endregion LoginUserDto
 }

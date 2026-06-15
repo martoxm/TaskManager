@@ -4,7 +4,7 @@ using TaskStatus = TaskManager.Domain.Enums.TaskStatus;
 
 namespace TaskManager.Domain.Entities
 {
-    public class Task
+    public class Task 
     {
         #region Propriedades da entidade
 
