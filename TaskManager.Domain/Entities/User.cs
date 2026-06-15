@@ -1,16 +1,32 @@
 ﻿namespace TaskManager.Domain.Entities
 {
-    #region User Entity
+    #region User
+
     public class User
     {
-        public int Id { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Guid Id { get; private set; }
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string PasswordHash { get; set; }
 
-        // Relacionamento: Usuário → Tarefas
-        public List<Task> Tasks { get; set; } = new List<Task>();
+        public User()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public User(string name, string email, string passwordHash)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Email = email;
+            PasswordHash = passwordHash;
+        }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+        }
     }
+
     #endregion
 }

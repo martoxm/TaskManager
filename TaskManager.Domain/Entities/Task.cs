@@ -15,6 +15,7 @@ namespace TaskManager.Domain.Entities
         public Priority Priority { get; private set; }
         public DateTime DueDate { get; private set; }
         public TaskStatus Status { get; private set; }
+        public Guid UserId { get; private set; }
 
         #endregion Propriedades da entidade
 
