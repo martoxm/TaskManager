@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TaskDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MySQL"),
-        new MySqlServerVersion(new Version(8, 0, 35)),
+        new MySqlServerVersion(new Version(8, 0, 46)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()
     ));
 
