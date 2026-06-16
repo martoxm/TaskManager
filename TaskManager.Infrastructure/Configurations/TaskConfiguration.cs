@@ -31,9 +31,13 @@ namespace TaskManager.Infrastructure.Configurations
                 .HasMaxLength(500);
 
             builder.Property(t => t.Priority)
+                .HasConversion<string>()
+                .HasMaxLength(20)
                 .IsRequired();
 
             builder.Property(t => t.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20)
                 .IsRequired();
 
             builder.Property(t => t.DueDate)

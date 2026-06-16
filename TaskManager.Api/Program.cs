@@ -24,15 +24,15 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-        In = ParameterLocation.Header
+        In = ParameterLocation.Header,
+        Description = "Cole apenas o token JWT"
     });
 
     options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
-        { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
     });
 });
-
 // DbContext
 builder.Services.AddDbContext<TaskDbContext>(options =>
     options.UseMySql(
@@ -85,3 +85,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

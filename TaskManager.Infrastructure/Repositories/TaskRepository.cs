@@ -13,10 +13,7 @@ namespace TaskManager.Infrastructure.Repositories
         private readonly TaskDbContext _context;
 
         // Injeção de dependência via construtor
-        public TaskRepository(TaskDbContext context)
-        {
-            _context = context;
-        }
+        public TaskRepository(TaskDbContext context) => _context = context;
 
         #region Método GetById
 
