@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System.Reflection;
 using System.Text;
 using TaskManager.Application.Interfaces;
 using TaskManager.Application.Services;
@@ -18,6 +19,28 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "TaskManager API",
+        Version = "v1",
+        Description = "API para gerenciamento de tarefas com autenticação JWT",
+        Contact = new OpenApiContact
+        {
+            Name = "Gabriel Martorelli",
+            Url = new Uri("https://github.com/martoxm")
+        }
+    });
+
+    // Habilita as annotations do Swashbuckle
+    options.EnableAnnotations();
+
+    // Inclui os comentários XML gerados automaticamente
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+
+    // Configuração do JWT no Swagger (seu projeto já usa auth)
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
