@@ -13,5 +13,5 @@ namespace TaskManager.Api.Extensions
         }
     }
 
-    #endregion
+    #endregion MiddlewareExtensions
 }

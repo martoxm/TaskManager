@@ -42,5 +42,5 @@ namespace TaskManager.Api.Middleware
         }
     }
 
-    #endregion
+    #endregion ExceptionMiddleware
 }

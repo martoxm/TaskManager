@@ -27,5 +27,5 @@ namespace TaskManager.Api.Controllers
         }
     }
 
-    #endregion
+    #endregion AuthController
 }

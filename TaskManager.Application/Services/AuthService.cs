@@ -1,13 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using TaskManager.Application.DTOs;
 using TaskManager.Application.Interfaces;
 using TaskManager.Domain.Entities;
 using TaskManager.Domain.Interfaces;
-using Microsoft.AspNetCore.Identity;
 
 namespace TaskManager.Application.Services
 {
@@ -17,7 +17,7 @@ namespace TaskManager.Application.Services
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IConfiguration _configuration = configuration;
-        private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
+        private readonly PasswordHasher<User> _passwordHasher = new();
 
         public async Task<AuthResponseDto> Register(CreateUserDto dto)
         {
